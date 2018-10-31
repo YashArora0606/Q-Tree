@@ -24,13 +24,14 @@ import java.util.ArrayList;
 class BounceTester extends JFrame {
 
 	// These are static variables that dictate how the code should be run
-	static int STARTING_NUM_BALLS = 100;
+	static int STARTING_NUM_BALLS = 100000;
 	static int CAPACITY_BEFORE_SPLITTING = 4;
 	static int BALLS_TO_ADD_ON_KEYPRESS = 10;
 	static int SCREEN_RESOLUTION_CONSTANT = 23;
 	static boolean COLOR_MODE = true;
 	static int MAX_DIVISIONS = 10;
 	static double VELOCITY_MAXIMUM = 1;
+	static boolean VISUALIZATION_MODE = true;
 	
 	// These variables are used in the calculation of the frames per second
 	double currentTime;
@@ -114,6 +115,20 @@ class BounceTester extends JFrame {
 			// Add all the balls into the QuadTree
 			for (int i = 0; i < balls.size(); i++) {
 				qTree.insert(balls.get(i));
+				
+				// Balls are white in visualization mode
+				if(VISUALIZATION_MODE) {
+					balls.get(i).setColor(Color.WHITE);
+				}
+			}
+			
+			// Visualization mode slows everything down
+			if (VISUALIZATION_MODE) {
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 
 			// Allow the user to resize the screen and dynamically change the QuadTree
@@ -268,9 +283,15 @@ class BounceTester extends JFrame {
 			double length = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 			
 			// If the distance between them is less than or equal to the sum of their radii, then a collision has occurred
-			if (length <= ((double)a.getDiameter())/2 + ((double) b.getDiameter())/2) {
-				return true;
+			if (length <= ((double)a.getDiameter())/2 + ((double) b.getDiameter())/2) {	
 				
+				if (VISUALIZATION_MODE) {
+					a.setColor(Color.GREEN);
+					b.setColor(Color.GREEN);
+				}
+				
+				return true;
+			
 				// Otherwise there is no collision
 			} else {
 				return false;
@@ -316,7 +337,7 @@ class BounceTester extends JFrame {
 			for (int i = 0; i < balls.size(); i++) {
 				
 				// If color mode has been turned on, the color must be set to the ball's color
-				if (COLOR_MODE) {
+				if (COLOR_MODE || VISUALIZATION_MODE) {
 					g.setColor(balls.get(i).getColor());
 				}
 				

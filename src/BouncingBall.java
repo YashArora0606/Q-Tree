@@ -79,6 +79,15 @@ public class BouncingBall {
 	public Color getColor() {
 		return color;
 	}
+	
+	/**
+	 * setColor
+	 * Method that sets the ball's color
+	 * @param color that the ball will be set to
+	 */
+	public void setColor(Color c) {
+		this.color = c;
+	}
 
 	/**
 	 * getxChange
